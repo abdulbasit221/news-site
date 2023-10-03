@@ -2,9 +2,9 @@
 include "config.php";
 session_start();
 
-if($_SESSION['user_role'] == 0){
- header("location: post.php");
-}
+// if($_SESSION['user_role'] == 0){
+//  header("location: post.php");
+// }
  ?>
 <!doctype html>
 <html>
@@ -54,7 +54,7 @@ if($_SESSION['user_role'] == 0){
                             session_start();
                             $_session["username"] = $row["username"];
                             $_session["user_id"] = $row["user_id"];
-                            $_session["role"] = $row["role"];
+                            $_session["user_role"] = $row["role"];
                             header("location:users.php");
                         }
                         }else{
