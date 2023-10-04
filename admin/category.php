@@ -1,4 +1,19 @@
-<?php include "header.php"; ?>
+<?php include "header.php"; 
+
+if(isset($_GET['page'])){
+    $page =$_GET['page'];
+  }else{
+    $page = 1;
+  }
+  
+  $per_page = 5;
+  $start = ($page -1) * $per_page;
+  
+  $Fetch_data= "SELECT * FROM `category` ";
+  $Fetch_conn  = mysqli_query($conn , $Fetch_data);
+
+
+?>
 <div id="admin-content">
     <div class="container">
         <div class="row">
@@ -18,55 +33,59 @@
                         <th>Delete</th>
                     </thead>
                     <tbody>
+                        <?php 
+                        while($row = mysqli_fetch_assoc($Fetch_conn)){
+                        ?>
                         <tr>
-                            <td class='id'>1</td>
-                            <td>Html</td>
-                            <td>5</td>
-                            <td class='edit'><a href='update-category.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-category.php'><i class='fa fa-trash-o'></i></a></td>
+                            <td class='id'><?php echo $row['category_id']?></td>
+                            <td><?php echo $row['category_name']?></td>
+                            <td><?php echo $row['post']?></td>
+                            <td class='edit'><a href='update-category.php?id=<?php echo $row['category_id']?>'><i
+                                        class='fa fa-edit'></i></a></td>
+                            <td class='delete'><a href='delete-category.php?id=<?php echo $row['category_id']?>'><i
+                                        class='fa fa-trash-o'></i></a></td>
                         </tr>
-                        <tr>
-                            <td class='id'>2</td>
-                            <td>Css</td>
-                            <td>15</td>
-                            <td class='edit'><a href='update-category.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-category.php'><i class='fa fa-trash-o'></i></a></td>
-                        </tr>
-                        <tr>
-                            <td class='id'>3</td>
-                            <td>Java</td>
-                            <td>8</td>
-                            <td class='edit'><a href='update-category.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-category.php'><i class='fa fa-trash-o'></i></a></td>
-                        </tr>
-                        <tr>
-                            <td class='id'>4</td>
-                            <td>Php</td>
-                            <td>11</td>
-                            <td class='edit'><a href='update-category.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-category.php'><i class='fa fa-trash-o'></i></a></td>
-                        </tr>
-                        <tr>
-                            <td class='id'>5</td>
-                            <td>Python</td>
-                            <td>13</td>
-                            <td class='edit'><a href='update-category.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-category.php'><i class='fa fa-trash-o'></i></a></td>
-                        </tr>
-                        <tr>
-                            <td class='id'>6</td>
-                            <td>Scss</td>
-                            <td>3</td>
-                            <td class='edit'><a href='update-category.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-category.php'><i class='fa fa-trash-o'></i></a></td>
-                        </tr>
+                        <?php }?>
                     </tbody>
                 </table>
                 <ul class='pagination admin-pagination'>
-                    <li class="active"><a>1</a></li>
-                    <li><a>2</a></li>
-                    <li><a>3</a></li>
+                    <?php  
+                  if($page > 1){
+                  ?>
+
+                    <li class="page-item"><a class="page-link"
+                            href="category.php?page=<?php echo ($page-1)?>">Previous</a>
+                    </li>
+
+                    <?php 
+                  }
+                  $fetch = "SELECT * FROM `category`";
+                  $res = mysqli_query($conn,$fetch);
+                  $products = mysqli_num_rows($res);
+                  $total_pages = ceil($products / $per_page);
+                  
+                  for ($i=1; $i <= $total_pages; $i++) { 
+                    
+                  ?>
+
+
+                    <li class="page-item"><a class="page-link"
+                            href="category.php?page=<?php echo $i?>"><?php echo $i?></a>
+                    </li>
+                    <?php  
+                  }
+
+                  if($page < $total_pages){
+
+               
+                  ?>
+
+                    <li class="page-item"><a class="page-link" href="category.php?page=<?php echo ($page+1)?>">Next</a>
+                    </li>
+
+                    <?php }?>
                 </ul>
+                </nav>
             </div>
         </div>
     </div>

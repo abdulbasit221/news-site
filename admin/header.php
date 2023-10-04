@@ -1,5 +1,6 @@
 <?php 
 include "config.php";
+// session_start();
 // if(!isset($_SESSION['username'])){
 //     header("location : index.php");
 //   }
@@ -53,6 +54,13 @@ include "config.php";
                         <li>
                             <a href="post.php">Post</a>
                         </li>
+                        <?php 
+                        
+                        // if($_session["user_role"]=='1'){
+                            
+                        // }
+                        
+                        ?>
                         <li>
                             <a href="category.php">Category</a>
                         </li>

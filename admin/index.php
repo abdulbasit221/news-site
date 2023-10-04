@@ -2,7 +2,7 @@
 include "config.php";
 session_start();
 
-// if($_SESSION['user_role'] == 0){
+// if(!$_SESSION['user_name']){
 //  header("location: post.php");
 // }
  ?>

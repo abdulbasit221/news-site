@@ -1,5 +1,9 @@
 <?php include "header.php";
 
+//  if($_session["user_role"]=='0'){
+//     header("location : index.php");            
+//   }
+
 
 $sid = $_GET['id'];
 
