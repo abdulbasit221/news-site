@@ -1,11 +1,32 @@
 <?php 
-include "config.php";
-session_start();
 
-// if(!$_SESSION['user_name']){
-//  header("location: post.php");
+include("config.php");
+session_start();
+// if(isset($_SESSION['username'])){
+//   header("location : post.php");
 // }
- ?>
+
+
+if(isset($_POST['login'])){
+    $user= mysqli_real_escape_string($conn ,$_POST['username']);
+    $password=  md5( $_POST['password']);
+  
+     
+    $sql = "SELECT user_id ,username , role FROM user WHERE username = '{$user}' AND password = '{$password}' ";
+    $result = mysqli_query($conn , $sql);
+
+if(mysqli_num_rows($result) > 0){
+    while( $row = mysqli_fetch_assoc($result)){
+        session_start();
+        $_SESSION['username'] = $row['username'];
+        $_SESSION['user_id'] = $row['user_id'];
+        $_SESSION['user_role'] = $row['role'];
+        header("location: post.php");
+    }
+}
+}
+
+?>
 <!doctype html>
 <html>
 
@@ -38,31 +59,7 @@ session_start();
                         </div>
                         <input type="submit" name="login" class="btn btn-primary" value="login" />
                     </form>
-                    <!-- /Form  End php-->
-                    <?php
-
-
-
-                        if(isset($_POST['login'])){
-                        include "config.php";
-                        $username = mysqli_real_escape_string($conn,$_POST['username']);
-                        $words = md5($_POST['password']);
-                        $sql = "SELECT user_id, role FROM user WHERE username = '{$username}' ";
-                        $result = mysqli_query($conn,$sql) or die ("Query Field.");
-                        if(mysqli_num_rows($result) > 0 )
-                        while($row = mysqli_fetch_assoc($result)){
-                            session_start();
-                            $_session["username"] = $row["username"];
-                            $_session["user_id"] = $row["user_id"];
-                            $_session["user_role"] = $row["role"];
-                            header("location:users.php");
-                        }
-                        }else{
-
-                            echo '<div class="alert alert-danger">username and password are not matched</div>';
-                        }
-
-                        ?>
+                    <!-- /Form  End -->
                 </div>
             </div>
         </div>

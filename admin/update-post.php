@@ -1,7 +1,10 @@
 <?php include "header.php";
+
 if($_SESSION['user_role'] == 0){
     header("location: post.php");
    }
+   
+
 
    $id = $_GET['id'];
 

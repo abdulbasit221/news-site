@@ -1,5 +1,9 @@
 <?php include "header.php"; 
 
+if($_SESSION['user_role'] == 0){
+    header("location: post.php");
+   }
+
 if(isset($_GET['page'])){
     $page =$_GET['page'];
   }else{
@@ -9,7 +13,7 @@ if(isset($_GET['page'])){
   $per_page = 5;
   $start = ($page -1) * $per_page;
   
-//   if($_SESSION['user_role'] == 1){
+  if($_SESSION['user_role'] == 1){
     
    
   $Fetch_data= "SELECT post.post_id , post.title , post.description , post.post_date ,category.category_name,category.category_id , user.username FROM post 
@@ -17,14 +21,14 @@ if(isset($_GET['page'])){
   LEFT JOIN user ON post.author = user.user_id
   ORDER BY post.post_id DESC LIMIT $start, $per_page ";
 
-//   }elseif($_SESSION['user_role'] == 0){
+  }elseif($_SESSION['user_role'] == 0){
 
-//     $Fetch_data= "SELECT post.post_id , post.title , post.description , post.post_date ,category.category_name, user.username FROM post 
-//   LEFT JOIN category ON post.category = category.category_id
-//   LEFT JOIN user ON post.author = user.user_id
-//   WHERE post.author = {$_SESSION['user_id']}
-//   ORDER BY post.post_id DESC LIMIT $start, $per_page ";
-//   }
+    $Fetch_data= "SELECT post.post_id , post.title , post.description , post.post_date ,category.category_name, user.username FROM post 
+  LEFT JOIN category ON post.category = category.category_id
+  LEFT JOIN user ON post.author = user.user_id
+  WHERE post.author = {$_SESSION['user_id']}
+  ORDER BY post.post_id DESC LIMIT $start, $per_page ";
+  }
 
   $Fetch_conn  = mysqli_query($conn , $Fetch_data);
 

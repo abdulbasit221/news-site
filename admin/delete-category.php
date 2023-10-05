@@ -2,9 +2,9 @@
 
 include "config.php";
 
-// if($_session["user_role"]=='0'){
-//     header("location : index.php");            
-//   }
+if($_session["user_role"]=='0'){
+    header("location : index.php");            
+  }
 
 $id= $_GET['id'];
 

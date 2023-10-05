@@ -1,4 +1,48 @@
-<?php include "header.php"; ?>
+<?php
+include "header.php";
+
+if (isset($_POST['submit'])) {
+    $post_title = $_POST['post_title'];
+    $postdesc = $_POST['postdesc'];
+    $category = $_POST['category'];
+    $date = date("Y-m-d");
+    $author = $_SESSION['user_id'];
+
+    $image = $_FILES['fileToUpload'];
+    $temp_name = $image['tmp_name'];
+    $img_name = $image['name'];
+    $img_size = $image['size']; 
+
+    if ($img_size <= 1000000) {
+        move_uploaded_file($temp_name, "images/$img_name");
+    } else {
+        echo "IMAGE NOT UPLOAD, IT IS MORE THAN 1 MB";
+    }
+
+    
+    $check_query = "SELECT * FROM post WHERE title = '$post_title'";
+    $check_result = mysqli_query($conn, $check_query);
+
+    if (!$check_result) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+
+    if (mysqli_num_rows($check_result) > 0) {
+        $error = "Post title already exists";
+    } else {
+        $insert = "INSERT INTO post (title, description, category, post_date, author, post_img) VALUES ('$post_title', '$postdesc', '$category', '$date', '$author', '$img_name')";
+        $update = "UPDATE category SET post = post + 1 WHERE category_id = $category";
+
+        if (mysqli_query($conn, $insert) && mysqli_query($conn, $update)) {
+            header("Location: post.php");
+            exit;
+        } else {
+            echo "<script>alert('Data Not Entered')</script>";
+        }
+    }
+}
+?>
+
 <div id="admin-content">
     <div class="container">
         <div class="row">
@@ -7,9 +51,7 @@
             </div>
             <div class="col-md-offset-3 col-md-6">
                 <!-- Form -->
-
-
-                <form action="save-post.php" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="post_title">Title</label>
                         <input type="text" name="post_title" class="form-control" autocomplete="off" required>
@@ -21,18 +63,21 @@
                     <div class="form-group">
                         <label for="exampleInputPassword1">Category</label>
                         <select name="category" class="form-control">
-                            <option selected> Select Category</option>
+                            <option disabled> Select Category</option>
 
                             <?php 
-                            
-                include "config.php";
-                $sql = "SELECT * FROM category";
-                $result = mysqli_query($conn,$sql) or die ("Query Field.");
-                if(mysqli_num_rows($result) > 0 )
-                        while($row = mysqli_fetch_assoc($result)){
-                            echo " <option value ='{$row['category_id']}'>{$row['category_name']}</option>";
+                          $sql = "SELECT * FROM category";
+                          $res = mysqli_query($conn , $sql) ;
+                          
+                          if(mysqli_num_rows($res) > 0){
+                              while($row = mysqli_fetch_assoc($res)){
+                                  
+                                  echo "<option value='$row[category_id]'> $row[category_name] </option>";
+                            }
                         }
-                ?>
+                        ?>
+
+
                         </select>
                     </div>
                     <div class="form-group">
@@ -46,4 +91,6 @@
         </div>
     </div>
 </div>
-<?php include "footer.php"; ?>
+<?php include "footer.php"; 
+
+?>

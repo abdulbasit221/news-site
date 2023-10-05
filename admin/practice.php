@@ -1,25 +1,22 @@
 <?php include 'header.php'; ?>
+
 <div id="main-content">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <!-- post-container -->
                 <div class="post-container">
-                    <?php 
-                    
-                    if(isset($_GET['search'])){
-                        $search = mysqli_real_escape_string($conn,$_GET['search']);
-                        $search_query = "SELECT * FROM post WHERE title LIKE '%$search'OR description LIKE'%$search%'";
-                        $result = mysqli_query($conn,$search_query); 
-                         
-                    
-                    
-                    if (mysqli_num_rows($result) > 0) {
-                        echo "<h2 class='page-heading'>Search Results for: " . htmlspecialchars($search) . "</h2>";
-                        
-                        
-                    while ($row = mysqli_fetch_assoc($result)) {
-                    ?>
+                    <?php
+                    if (isset($_GET['search'])) {
+                        $search_term = mysqli_real_escape_string($conn, $_GET['search']); 
+                        $search_query = "SELECT * FROM post WHERE title LIKE '%$search_term%' OR description LIKE '%$search_term%'";
+                        $result = mysqli_query($conn, $search_query);
+
+                        if (mysqli_num_rows($result) > 0) {
+                            echo "<h2 class='page-heading'>Search Results for: " . htmlspecialchars($search_term) . "</h2>";
+
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                ?>
                     <div class="post-content">
                         <div class="row">
                             <div class="col-md-4">
