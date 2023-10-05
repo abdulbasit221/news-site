@@ -6,17 +6,16 @@
                 <!-- post-container -->
                 <div class="post-container">
                     <?php 
-                    
+                     
+                     
                     if(isset($_GET['search'])){
                         $search = mysqli_real_escape_string($conn,$_GET['search']);
                         $search_query = "SELECT * FROM post WHERE title LIKE '%$search'OR description LIKE'%$search%'";
                         $result = mysqli_query($conn,$search_query); 
                          
-                    
-                    
                     if (mysqli_num_rows($result) > 0) {
                         echo "<h2 class='page-heading'>Search Results for: " . htmlspecialchars($search) . "</h2>";
-                        
+
                         
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
